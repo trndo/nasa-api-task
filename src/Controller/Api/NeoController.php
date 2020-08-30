@@ -10,13 +10,16 @@ use App\Service\PaginatorService\Paginator;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class NeoController extends AbstractFOSRestController
 {
     /**
-     * @Rest\Get("/neo/hazardous", name="hazardous")
+     * Get all hazardous asteroids
+     *
+     * @Rest\Get("/api/neo/hazardous", name="hazardous_asteroids")
      */
     public function fetchHazardous(
         Request $request,
@@ -38,5 +41,33 @@ class NeoController extends AbstractFOSRestController
             ->setLinks($pagination);
 
         return $this->view($response, Response::HTTP_OK);
+    }
+
+    /**
+     * Get the fastest asteroid with optional value hazardous true/false
+     *
+     * @Rest\Get("/api/neo/fastest", name="fastest_asteroid")
+     */
+    public function fetchTheFastest(
+        Request $request,
+        AsteroidDataProvider $asteroidDataProvider
+    ): View {
+        $asteroid = $asteroidDataProvider->getTheFastestAsteroid($request->query);
+
+        return $this->view($asteroid, Response::HTTP_OK);
+    }
+
+    /**
+     * Get the month with most asteroids with optional value hazardous true/false
+     *
+     * @Rest\Get("/api/neo/fastest", name="best_month")
+     */
+    public function fetchTheBestMonth(
+        Request $request,
+        AsteroidDataProvider $asteroidDataProvider
+    ): View {
+        $asteroid = $asteroidDataProvider->getTheBestMonth($request->query);
+
+        return $this->view($asteroid, Response::HTTP_OK);
     }
 }

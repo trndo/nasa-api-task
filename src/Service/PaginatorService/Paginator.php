@@ -37,14 +37,13 @@ class Paginator
 
         $pagination->setFirst($this->generateUrl($routeName, 1, $count));
         $pagination->setLast($this->generateUrl($routeName, $totalPages, $count));
-        $pagination->setNext($this->generateUrl(
+        $pagination->setPrev($this->generateUrl(
                 $routeName,
                 $page > 1 ? $page - 1 : 1,
                 $count
             )
         );
-
-        $pagination->setPrev($this->generateUrl(
+        $pagination->setNext($this->generateUrl(
                 $routeName,
                 $page < $totalPages ? $page + 1 : $totalPages,
                 $count

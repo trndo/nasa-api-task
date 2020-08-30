@@ -5,8 +5,9 @@ namespace App\Service\AsteroidDataProvider;
 
 
 use App\Mapper\AsteroidMapper;
-use App\Model\PaginatedResponse;
+use App\Model\Asteroid\AsteroidItem;
 use App\Repository\AsteroidRepository;
+use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 class AsteroidDataProvider
@@ -24,7 +25,6 @@ class AsteroidDataProvider
     public function getHazardousAsteroids(ParameterBag $parameterBag): array
     {
         $asteroids = $this->asteroidRepository->findAllHazardous($parameterBag);
-        dd($asteroids);
         $asteroidItems = [];
 
         foreach ($asteroids as $asteroid) {
@@ -32,6 +32,22 @@ class AsteroidDataProvider
         }
 
         return $asteroidItems;
+    }
+
+    public function getTheFastestAsteroid(ParameterBag $parameterBag): AsteroidItem
+    {
+        $asteroid = $this->asteroidRepository->findOneTheFastest($parameterBag);
+
+        if (null === $asteroid) {
+            throw new EntityNotFoundException('Asteroid is not found!');
+        }
+
+        return AsteroidMapper::fromEntityToModel($asteroid);
+    }
+
+    public function getTheBestMonth(ParameterBag $parameterBag): string
+    {
+        $date = $this->asteroidRepository->findBestMonth($parameterBag);
     }
 
     public function getHazardousAsteroidsTotalRows(ParameterBag $parameterBag): int

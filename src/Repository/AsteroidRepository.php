@@ -43,17 +43,18 @@ class AsteroidRepository extends ServiceEntityRepository
         $count = $parameterBag->getInt('count', 10);
         $page = $parameterBag->getInt('page', 1);
 
-        $qb = $this->createQueryBuilder('a');
+        $qb = $this->createQueryBuilder('a')
+                ->andWhere('a.isHazardous = 1')
+                ->orderBy('a.date', 'DESC');
 
         $this->addPaging($qb, $page, $count);
 
         return new Paginator($qb->getQuery(), false);
     }
 
-    public function findOneTheFastest(ParameterBag $parameterBag = null)
+    public function findOneTheFastest(ParameterBag $parameterBag): ?Asteroid
     {
-//        $isHazardous = $parameterBag->getBoolean('hazardous', false);
-        $isHazardous = 0;
+        $isHazardous = $parameterBag->getBoolean('hazardous', false);
 
         $qb = $this->createQueryBuilder('a')
             ->andWhere('a.isHazardous = :isHazardous')
@@ -61,13 +62,12 @@ class AsteroidRepository extends ServiceEntityRepository
             ->setParameter('isHazardous', $isHazardous)
             ->setMaxResults(1);
 
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
-    public function findBestDate(ParameterBag $parameterBag = null)
+    public function findBestMonth(ParameterBag $parameterBag)
     {
-        //$isHazardous = $parameterBag->getBoolean('hazardous', false);
-        $isHazardous = false;
+        $isHazardous = $parameterBag->getBoolean('hazardous', false);
 
         $qb = $this->createQueryBuilder('a')
             ->select('a.date')
@@ -76,7 +76,7 @@ class AsteroidRepository extends ServiceEntityRepository
             ->orderBy('COUNT(a.id)', 'DESC')
             ->setMaxResults(1);
 
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
