@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Command;
 
 use App\Entity\Asteroid;
@@ -41,7 +43,7 @@ class RetrieveAsteroidsCommand extends Command
         $this->repository = $repository;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $currentDate = new \DateTime();
         $defaultEndDate = $currentDate->format('Y-m-d');
@@ -80,7 +82,6 @@ class RetrieveAsteroidsCommand extends Command
             $response = $this->nasaApiClient->getNeoFeed($startDate, $endDate);
 
             foreach ($response['near_earth_objects'] as $date => $objects) {
-
                 $asteroid = $this->repository->findOneByDate($date);
 
                 //If at least one record was found for chosen date.
@@ -93,12 +94,12 @@ class RetrieveAsteroidsCommand extends Command
                     $asteroid = AsteroidMapper::fromResponseToEntity($asteroid, new Asteroid());
                     $this->entityManager->persist($asteroid);
 
-                    if ($index % 100 === 0) {
+                    if (0 === $index % 100) {
                         $this->entityManager->flush();
                         $this->entityManager->clear();
                     }
 
-                    $index++;
+                    ++$index;
                 }
             }
 
@@ -118,9 +119,7 @@ class RetrieveAsteroidsCommand extends Command
         $inputDate = \DateTime::createFromFormat($format, $date);
 
         if (!$inputDate instanceof \DateTime || $inputDate->format($format) !== $date) {
-            throw new \InvalidArgumentException(
-                'Invalid date format. Format should be YYYY-MM-DD'
-            );
+            throw new \InvalidArgumentException('Invalid date format. Format should be YYYY-MM-DD');
         }
     }
 }

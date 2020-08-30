@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Service\PaginatorService;
-
 
 use App\Model\Pagination;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -16,7 +16,6 @@ class Paginator
 
     /**
      * Paginator constructor.
-     * @param UrlGeneratorInterface $urlGenerator
      */
     public function __construct(UrlGeneratorInterface $urlGenerator)
     {
@@ -24,7 +23,7 @@ class Paginator
     }
 
     /**
-     * Create pagination
+     * Create pagination.
      */
     public function createPagination(
         string $routeName,
@@ -36,7 +35,7 @@ class Paginator
         $totalPages = ceil($totalRows / $count);
 
         $pagination->setFirst($this->generateUrl($routeName, 1, $count));
-        $pagination->setLast($this->generateUrl($routeName, $totalPages, $count));
+        $pagination->setLast($this->generateUrl($routeName, (int) $totalPages, $count));
         $pagination->setPrev($this->generateUrl(
                 $routeName,
                 $page > 1 ? $page - 1 : 1,
@@ -54,7 +53,7 @@ class Paginator
     }
 
     /**
-     * Return generated url
+     * Return generated url.
      */
     private function generateUrl(string $routeName, int $page, int $count): string
     {

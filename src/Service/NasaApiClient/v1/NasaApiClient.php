@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Service\NasaApiClient\v1;
-
 
 use App\Service\NasaApiClient\NasaApiInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -33,6 +33,9 @@ class NasaApiClient implements NasaApiInterface
         $this->apiHost = $parameterBag->get('nasa_api_host');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getNeoFeed(string $startDate, string $endDate): array
     {
         $response = $this->httpClient->request(
@@ -42,8 +45,8 @@ class NasaApiClient implements NasaApiInterface
                 'query' => [
                     'start_date' => $startDate,
                     'end_date' => $endDate,
-                    'api_key' => $this->apiKey
-                ]
+                    'api_key' => $this->apiKey,
+                ],
             ]
         );
 

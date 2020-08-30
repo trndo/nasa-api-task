@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Mapper;
-
 
 use App\Entity\Asteroid;
 use App\Model\Asteroid\AsteroidItem;
@@ -12,11 +12,14 @@ class AsteroidMapper
     private const NAME = 'name';
     private const REFERENCE = 'neo_reference_id';
     private const SPEED = 'kilometers_per_hour';
-    private const IS_HAZARDOUS= 'is_potentially_hazardous_asteroid';
+    private const IS_HAZARDOUS = 'is_potentially_hazardous_asteroid';
     private const DATE = 'close_approach_date';
     private const CLOSE_APPROACH_DATA = 'close_approach_data';
     private const RELATIVE_VELOCITY = 'relative_velocity';
 
+    /**
+     * Transform api feed response to entity.
+     */
     public static function fromResponseToEntity(array $response, Asteroid $asteroid): Asteroid
     {
         $date = new \DateTime($response[self::CLOSE_APPROACH_DATA][0][self::DATE]);
@@ -30,6 +33,9 @@ class AsteroidMapper
         return $asteroid;
     }
 
+    /**
+     * Transform entity to model.
+     */
     public static function fromEntityToModel(Asteroid $asteroid): AsteroidItem
     {
         $asteroidItem = new AsteroidItem();

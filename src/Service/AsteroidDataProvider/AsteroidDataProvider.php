@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Service\AsteroidDataProvider;
-
 
 use App\Mapper\AsteroidMapper;
 use App\Model\Asteroid\AsteroidItem;
@@ -47,7 +47,7 @@ class AsteroidDataProvider
 
     public function getTheBestMonth(ParameterBag $parameterBag): string
     {
-        $date = $this->asteroidRepository->findBestMonth($parameterBag);
+        return $this->asteroidRepository->findBestMonth($parameterBag);
     }
 
     public function getHazardousAsteroidsTotalRows(ParameterBag $parameterBag): int

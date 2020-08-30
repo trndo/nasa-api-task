@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\Asteroid;
@@ -23,7 +25,7 @@ class AsteroidRepository extends ServiceEntityRepository
     }
 
     /**
-     * Find asteroid by date
+     * Find asteroid by date.
      */
     public function findOneByDate(string $date): ?Asteroid
     {
@@ -36,7 +38,7 @@ class AsteroidRepository extends ServiceEntityRepository
     }
 
     /**
-     * Find all hazardous asteroids
+     * Find all hazardous asteroids.
      */
     public function findAllHazardous(ParameterBag $parameterBag): Paginator
     {
@@ -52,6 +54,9 @@ class AsteroidRepository extends ServiceEntityRepository
         return new Paginator($qb->getQuery(), false);
     }
 
+    /**
+     * Find the fastest asteroid.
+     */
     public function findOneTheFastest(ParameterBag $parameterBag): ?Asteroid
     {
         $isHazardous = $parameterBag->getBoolean('hazardous', false);
@@ -65,14 +70,18 @@ class AsteroidRepository extends ServiceEntityRepository
         return $qb->getQuery()->getOneOrNullResult();
     }
 
-    public function findBestMonth(ParameterBag $parameterBag)
+    /**
+     * Find best month with most asteroids.
+     */
+    public function findBestMonth(ParameterBag $parameterBag): ?string
     {
         $isHazardous = $parameterBag->getBoolean('hazardous', false);
 
         $qb = $this->createQueryBuilder('a')
-            ->select('a.date')
+            ->select('MONTHNAME(a.date) as month')
+            ->andWhere('a.isHazardous = :isHazardous')
             ->setParameter('isHazardous', $isHazardous)
-            ->groupBy('MONTH(a.date)')
+            ->groupBy('month')
             ->orderBy('COUNT(a.id)', 'DESC')
             ->setMaxResults(1);
 
@@ -80,18 +89,17 @@ class AsteroidRepository extends ServiceEntityRepository
     }
 
     /**
-     * Get hazardous asteroids count
+     * Get hazardous asteroids count.
      */
-    public function getTotalRowsHazardous(
-        ParameterBag $parameterBag
-    ): int {
+    public function getTotalRowsHazardous(ParameterBag $parameterBag): int
+    {
         $paginator = $this->findAllHazardous($parameterBag);
 
         return $paginator->count();
     }
 
     /**
-     * Adding pagination method
+     * Adding pagination method.
      */
     private function addPaging(
         QueryBuilder $qb,

@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Controller\Api;
-
 
 use App\Model\PaginatedResponse;
 use App\Service\AsteroidDataProvider\AsteroidDataProvider;
@@ -10,14 +10,13 @@ use App\Service\PaginatorService\Paginator;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class NeoController extends AbstractFOSRestController
 {
     /**
-     * Get all hazardous asteroids
+     * Get all hazardous asteroids.
      *
      * @Rest\Get("/api/neo/hazardous", name="hazardous_asteroids")
      */
@@ -31,7 +30,7 @@ class NeoController extends AbstractFOSRestController
         $response = new PaginatedResponse();
 
         $pagination = $paginator->createPagination(
-            'hazardous',
+            'hazardous_asteroids',
             $request->query->getInt('count', 10),
             $request->query->getInt('page', 1),
             $totalRows
@@ -44,7 +43,7 @@ class NeoController extends AbstractFOSRestController
     }
 
     /**
-     * Get the fastest asteroid with optional value hazardous true/false
+     * Get the fastest asteroid with optional value hazardous true/false.
      *
      * @Rest\Get("/api/neo/fastest", name="fastest_asteroid")
      */
@@ -58,16 +57,18 @@ class NeoController extends AbstractFOSRestController
     }
 
     /**
-     * Get the month with most asteroids with optional value hazardous true/false
+     * Get the month with most asteroids with optional value hazardous true/false.
      *
-     * @Rest\Get("/api/neo/fastest", name="best_month")
+     * @Rest\Get("/api/neo/best-month", name="best_month")
      */
     public function fetchTheBestMonth(
         Request $request,
         AsteroidDataProvider $asteroidDataProvider
     ): View {
-        $asteroid = $asteroidDataProvider->getTheBestMonth($request->query);
+        $month = $asteroidDataProvider->getTheBestMonth($request->query);
 
-        return $this->view($asteroid, Response::HTTP_OK);
+        return $this->view([
+            'name' => $month,
+        ], Response::HTTP_OK);
     }
 }

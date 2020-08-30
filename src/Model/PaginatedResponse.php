@@ -1,10 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Model;
-
-
-use App\Model\Asteroid\AsteroidItem;
 
 class PaginatedResponse
 {
@@ -18,43 +16,27 @@ class PaginatedResponse
      */
     private $links;
 
-    /**
-     * @return array
-     */
     public function getData(): array
     {
         return $this->data;
     }
 
-    /**
-     * @param array $data
-     * @return PaginatedResponse
-     */
-    public function setData(array $data): PaginatedResponse
+    public function setData(array $data): self
     {
         $this->data = $data;
 
         return $this;
     }
 
-    /**
-     * @return Pagination
-     */
     public function getLinks(): Pagination
     {
         return $this->links;
     }
 
-    /**
-     * @param Pagination $links
-     * @return PaginatedResponse
-     */
-    public function setLinks(Pagination $links): PaginatedResponse
+    public function setLinks(Pagination $links): self
     {
         $this->links = $links;
 
         return $this;
     }
-
-
 }

@@ -18,4 +18,4 @@ doctrine:
                 alias: App
         dql:
             datetime_functions:
-                MONTH: DoctrineExtensions\Query\Mysql\Month
+                MONTHNAME: DoctrineExtensions\Query\Mysql\MonthName

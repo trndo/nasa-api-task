@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Model\Asteroid;
-
 
 class AsteroidItem
 {
@@ -36,118 +36,75 @@ class AsteroidItem
      */
     private $isHazardous;
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     * @return AsteroidItem
-     */
-    public function setId(int $id): AsteroidItem
+    public function setId(int $id): self
     {
         $this->id = $id;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     * @return AsteroidItem
-     */
-    public function setName(string $name): AsteroidItem
+    public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getReference(): int
     {
         return $this->reference;
     }
 
-    /**
-     * @param int $reference
-     * @return AsteroidItem
-     */
-    public function setReference(int $reference): AsteroidItem
+    public function setReference(int $reference): self
     {
         $this->reference = $reference;
 
         return $this;
     }
 
-    /**
-     * @return float
-     */
     public function getSpeed(): float
     {
         return $this->speed;
     }
 
-    /**
-     * @param float $speed
-     * @return AsteroidItem
-     */
-    public function setSpeed(float $speed): AsteroidItem
+    public function setSpeed(float $speed): self
     {
         $this->speed = $speed;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getDate(): string
     {
         return $this->date;
     }
 
-    /**
-     * @param string $date
-     * @return AsteroidItem
-     */
-    public function setDate(string $date): AsteroidItem
+    public function setDate(string $date): self
     {
         $this->date = $date;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isHazardous(): bool
     {
         return $this->isHazardous;
     }
 
-    /**
-     * @param bool $isHazardous
-     * @return AsteroidItem
-     */
-    public function setIsHazardous(bool $isHazardous): AsteroidItem
+    public function setIsHazardous(bool $isHazardous): self
     {
         $this->isHazardous = $isHazardous;
 
         return $this;
     }
-
 }
